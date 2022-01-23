@@ -1,13 +1,9 @@
 # init: initializes system and sets constants
 
 import pygame
+import json
 
 pygame.init()
-
-###########
-# GLOBALS #
-###########
-
 
 #############
 # CONSTANTS #
@@ -31,11 +27,24 @@ ENABLED_TEMPORARY = 3
 SIZE_GAMESCREEN = (800, 600) 
 RECT_GAMESCREEN = (0, 0, 800, 600)
 
-# rect
+FADE_DISABLED = 0
+FADE_IN = 1
+FADE_OUT = 2
+FADE_OUT_SKIP_IN = 3
+
+INGAME_NORMAL = 0 
+INGAME_CHOICE = 1
+
+FADE_SPEED = 5
+
+# rect for something
 RECT_NEWGAME = (40, 520, 130, 30)
 RECT_CONTINUE = (190, 520, 110, 30)
 RECT_EXIT = (690, 520, 55, 30)
+RECT_MENU = (750, 20, 30, 30)
 
+RECT_DIALOG = (0, 450, 800, 150)
+RECT_SPEAKER = (20, 430, 100, 40)
 
 BLACK = (0, 0, 0)
 GRAY = (127, 127, 127)
@@ -56,12 +65,21 @@ TIMER_TICK = 60
 
 screen = pygame.display.set_mode(SIZE_GAMESCREEN)
 surf_alpha = pygame.Surface((800, 600)).convert_alpha()
+surf_fade = pygame.Surface((800, 600)).convert_alpha()
+
 clock = pygame.time.Clock()
+
+with open("asset/script.json", encoding="utf-8") as f:
+    SCRIPT = json.load(f)
 
 # use:
 # screen.blit(IMG_BG(num), RECT_GAMESCREEN)
 def IMG_BG(number):
-    return pygame.transform.scale(pygame.image.load(DIR_IMAGE + "bg/" + str(number) + ".png"), SIZE_GAMESCREEN)
+    try:
+        ret = pygame.transform.scale(pygame.image.load(DIR_IMAGE + "bg/" + str(number) + ".png"), SIZE_GAMESCREEN)
+    except:
+        ret = pygame.transform.scale(pygame.image.load(DIR_IMAGE + "bg/" + str(number) + ".jpg"), SIZE_GAMESCREEN)
+    return ret
 
 # use:
 # screen.blit(FONT(...), (x, y))
@@ -105,8 +123,3 @@ def isin(pos, rect):
 def get_pos_center_aligned_text(text, rect):
     return ((rect[0] + rect[2] // 2) - text.get_width() // 2, 
             (rect[1] + rect[3] // 2) - text.get_height() // 2)
-
-# string: str
-def parse(string):
-    return [i for i in string.split(' ') if i != '']
-

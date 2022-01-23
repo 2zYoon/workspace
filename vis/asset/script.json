@@ -1,0 +1,58 @@
+{
+    "1": {
+        "choice": 0,
+        "bg": 2,
+        "bgm": "none",
+        "sound": "none",
+        "speaker": "김덕팔",
+        "color-speaker": [255, 255, 255],
+        "color-text": [255, 255, 255],
+        "dialog": 1,
+        "text": "이것은 첫 스크립트입니다.",
+        "next": 2
+    },
+    "2": {
+        "choice": 0,
+        "bg": 1,
+        "bgm": "none",
+        "sound": "none",
+        "speaker": "김덕팔",
+        "color-speaker": [255, 255, 255],
+        "color-text": [255, 255, 255],
+        "dialog": 1,
+        "text": "이것은 두 번째 스크립트입니다.",
+        "next": 1
+    },
+    "template-normal": {
+        "choice": 0,
+        "bg": 1,
+        "bgm": "soundname or none",
+        "sound": "soundname or none",
+        "speaker": "someone",
+        "color-speaker": [255, 255, 255],
+        "color-text": [255, 255, 255],
+        "dialog": 1,
+        "text": "This is sample text",
+        "next": 665
+    },
+    "template-choice": {
+        "choice": 3,
+        "bg": 1,
+        "bgm": "soundname or none",
+        "sound": "soundname or none",
+        "text": "This is sample text",
+        "color-speaker": [255, 255, 255],
+        "color-text": [255, 255, 255],
+        "speaker": "someone",
+        "choices": [
+            "this is choice1",
+            "this is choice2",
+            "this is choice3"
+        ],
+        "next": [
+            321,
+            221,
+            176
+        ]
+    }
+}
