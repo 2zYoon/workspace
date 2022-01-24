@@ -25,3 +25,4 @@
   - `c:[1-3]:[0-3]`: 캐릭터 위치, n인 구도, n-번째 캐릭터 하이라이트(0은 no highlight)
   - `m`: 중앙 이미지
 - 일부 key 생략 가능하게(fontsize, color, bgm, date)
+- fade-out 옵션
