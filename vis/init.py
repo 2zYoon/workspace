@@ -44,7 +44,8 @@ RECT_EXIT = (690, 520, 55, 30)
 RECT_MENU = (750, 20, 30, 30)
 
 RECT_DIALOG = (0, 450, 800, 150)
-RECT_SPEAKER = (20, 430, 100, 40)
+RECT_SPEAKER_FACE = (10, 460, 144, 108)
+RECT_SPEAKER = (10, 460, 144, 108)
 
 BLACK = (0, 0, 0)
 GRAY = (127, 127, 127)
@@ -52,6 +53,8 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+COLOR_UNIST_NAVY = (0, 28, 84)
+COLOR_UNIST_EMERALD = (67, 193, 195)
 
 DIR_IMAGE = "asset/image/"
 DIR_FONT = "asset/font/"
@@ -74,11 +77,15 @@ with open("asset/script.json", encoding="utf-8") as f:
 
 # use:
 # screen.blit(IMG_BG(num), RECT_GAMESCREEN)
-def IMG_BG(number):
+def IMG_BG(number, alpha=255):
     try:
-        ret = pygame.transform.scale(pygame.image.load(DIR_IMAGE + "bg/" + str(number) + ".png"), SIZE_GAMESCREEN)
+        img = pygame.image.load(DIR_IMAGE + "bg/" + str(number) + ".png")
     except:
-        ret = pygame.transform.scale(pygame.image.load(DIR_IMAGE + "bg/" + str(number) + ".jpg"), SIZE_GAMESCREEN)
+        img = pygame.image.load(DIR_IMAGE + "bg/" + str(number) + ".jpg")
+    if alpha != 255:
+        img.set_alpha(alpha)
+        
+    ret = pygame.transform.scale(img, SIZE_GAMESCREEN)
     return ret
 
 # use:
@@ -87,8 +94,10 @@ def FONT(font, size, color, text):
     fonts = {
         "consolas": DIR_FONT + "consolas.ttf",
         "malgun": DIR_FONT + "malgun.ttf",
-        "malgunB": DIR_FONT + "malgunbd.ttf"
+        "malgunB": DIR_FONT + "malgunbd.ttf",
+        "cafe24": DIR_FONT + "Cafe24Ssurround.ttf"
     }
+    
 
     return pygame.font.Font(fonts[font], size).render(text, True, color)
 

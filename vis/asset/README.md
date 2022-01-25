@@ -2,8 +2,7 @@
 ## keys
 - `choice`: number of choice
   - `0`: normal
-  - `-1`: game over
-  - `n ([1,4])`: choice
+  - `n ([1,3])`: choice
 - `bg`: background image code
 - `bgm`: BGM (repeat)
   - `none`: no BGM
@@ -12,16 +11,18 @@
 - `sound`: sound (once)
   - `none`: no sound
   - `soundname`: some sound
-- `dialog`: option for dialog
-  - `1` enabled
-- `text`: dialog text
-- `next`: code of next script
-  - `choice 0`: int
-  - `choice n`: int arr
+- `dialog`: option for dialog (default: 1(enabled))
+- `textn`: n-th line dialog text 
+- `next`: code of next script (default: +1)
+- `bg-fadein`: background fade in (default: 1(enabled))
+- `date`: 날짜
   
 ## TODOs
 - 특정 스위치에 반응해서 분기하는 scene
 - image
   - `c:[1-3]:[0-3]`: 캐릭터 위치, n인 구도, n-번째 캐릭터 하이라이트(0은 no highlight)
   - `m`: 중앙 이미지
-- 일부 key 생략 가능하게(fontsize, color, bgm, date)
+
+# image
+- bg: 스케일 맞추긴 하지만 가급적 800x600 (4:3)
+- ch: 초상화는 144x108에 최적화됨 (4:3)
