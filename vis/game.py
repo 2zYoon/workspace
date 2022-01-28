@@ -3,7 +3,7 @@ from init import *
 mode = MODE_TITLE
 mode_resv = MODE_TITLE
 
-ingame_status = INGAME_NORMAL
+ingame_choices = []
 ingame_scene = 1
 
 dialog = ENABLED
@@ -20,7 +20,7 @@ def main():
     global alpha_fade, alpha_bg_fade
     global fade
     global mode_resv
-    global ingame_status, ingame_scene
+    global ingame_choices, ingame_scene
     global speaker
     global dialog
 
@@ -34,7 +34,7 @@ def main():
         
         # SCRIPT LOAD
         cur_script = SCRIPT[str(ingame_scene)]
-        ingame_status = bool(cur_script.get("choice", 0))
+        ingame_choices = cur_script.get("choice", list())
 
         if mode == MODE_TITLE:
             # button highlight
@@ -68,25 +68,30 @@ def main():
             else:
                 bg = bg_tmp
             
+            # dialog
             dialog = cur_script.get("dialog", dialog)
             if dialog == ENABLED or dialog == ENABLED_TEMPORARY:
-                pygame.draw.rect(surf_alpha, (255, 255, 255, 192), RECT_DIALOG)
-                pygame.draw.line(surf_alpha, COLOR_UNIST_NAVY, (0, 450), (800, 450), 3)
+                for i in range(200):
+                    pygame.draw.line(surf_alpha, (255, 255, 255, 200-i), (0, 600-i), (800, 600-i), 1)
 
                 speaker = cur_script.get("speaker", speaker)
 
                 if speaker != "none":
-                    pygame.draw.rect(surf_alpha, BLACK, RECT_SPEAKER_FACE)
-                    
-                    # speaker length estimation
-                    margin_speaker = 25 + (6 - len(speaker)) * 10 + (speaker.count(" ") * 5 + speaker.count("?") * 3)
-                    surf_alpha.blit(FONT("cafe24", 20, BLACK, speaker), (margin_speaker, 570))
+                    surf_alpha.blit(FONT("cafe24", 20, BLACK, speaker), (80, 490))
 
+                surf_alpha.blit(FONT("malgun", 20, (0, 0, 0, 200), cur_script.get("text1", "")), (80, 470+50))
+                surf_alpha.blit(FONT("malgun", 20, (0, 0, 0, 200), cur_script.get("text2", "")), (80, 495+50))
 
-                surf_alpha.blit(FONT("malgun", 20, (0, 0, 0, 200), cur_script.get("text1", "")), (180, 470))
-                surf_alpha.blit(FONT("malgun", 20, (0, 0, 0, 200), cur_script.get("text2", "")), (180, 495))
-                surf_alpha.blit(FONT("malgun", 20, (0, 0, 0, 200), cur_script.get("text3", "")), (180, 520))
-                surf_alpha.blit(FONT("malgun", 20, (0, 0, 0, 200), cur_script.get("text4", "")), (180, 545))
+            # choice
+            if len(ingame_choices) > 0:
+                rects = RECT_CHOICE[len(ingame_choices) - 1]
+                for i in range(len(ingame_choices)):
+                    if isin(mpos, rects[i]):
+                        pygame.draw.rect(surf_alpha, (255, 255, 255, 255), rects[i], 0, 3)
+                    else:
+                        pygame.draw.rect(surf_alpha, (255, 255, 255, 128), rects[i], 0, 3)
+                    surf_alpha.blit(FONT("malgun", 20, (0, 0, 0, 255), ingame_choices[i]), (rects[i][0]+10, rects[i][1]+10))
+
 
         # EVENT HANDLER
         for e in pygame.event.get():
@@ -109,10 +114,20 @@ def main():
 
                 if mode == MODE_GAME:
                     # normal
-                    if ingame_status == INGAME_NORMAL: 
-                        #TODO: exclude menu buttons 
+                    if len(ingame_choices) == 0: 
                         if not isin(mpos, RECT_MENU):
-                            ingame_scene = cur_script.get("next", ingame_scene+1)
+                            ingame_scene = cur_script.get("next", [ingame_scene+1, ])[0]
+                        else:
+                            print("menu clicked")
+                    else:
+                        rects = RECT_CHOICE[len(ingame_choices) - 1]
+                        for i in range(len(ingame_choices)):
+                            if isin(mpos, rects[i]):
+                                print("{} is chosen".format(i))
+                                ingame_scene = cur_script.get("next", [ingame_scene+1])[i]
+                        if isin(mpos, RECT_MENU):
+                            print("menu clicked")
+
 
         # FADE-IN / FADE-OUT          
         if fade == FADE_IN:

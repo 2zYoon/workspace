@@ -1,8 +1,6 @@
 # Script
 ## keys
-- `choice`: number of choice
-  - `0`: normal
-  - `n ([1,3])`: choice
+- `choice`: number of choice (default: [])
 - `bg`: background image code
 - `bgm`: BGM (repeat)
   - `none`: no BGM
