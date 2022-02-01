@@ -5,19 +5,9 @@ import json
 
 pygame.init()
 
-#############
-# CONSTANTS #
-############# 
-# mode: int
-# mapcode: int
-# rect: (x, y, w, h)
-# size: (w, h)
-# pos: (x, y)
-
 MODE_TITLE = 0
 MODE_GAME = 1
-MODE_SAVE_INGAME = 2
-MODE_SAVE_TITLE = 3
+MODE_COLLECTION = 2
 
 DISABLED = 0
 ENABLED = 1
@@ -34,11 +24,17 @@ FADE_OUT_SKIP_IN = 3
 
 FADE_SPEED = 5
 
-# rect for something
 RECT_NEWGAME = (40, 520, 130, 30)
-RECT_CONTINUE = (190, 520, 110, 30)
+RECT_CONTINUE = (180, 520, 110, 30)
+RECT_COLLECTION = (300, 520, 120, 30)
 RECT_EXIT = (690, 520, 55, 30)
 RECT_MENU = (750, 20, 30, 30)
+RECT_BACK = (690, 520, 63, 30)
+RECT_MSG = (20, 20, 150, 30)
+
+RECT_MENUITEM_1 = (660, 51, 120, 30)
+RECT_MENUITEM_2 = (660, 82, 120, 30)
+RECT_MENUITEM_3 = (660, 113, 120, 30)
 
 RECT_DIALOG = (0, 500, 800, 150)
 RECT_SPEAKER_FACE = (10, 460, 144, 108)
@@ -67,22 +63,23 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
-COLOR_UNIST_NAVY = (0, 28, 84)
-COLOR_UNIST_EMERALD = (67, 193, 195)
 
 DIR_IMAGE = "asset/image/"
 DIR_FONT = "asset/font/"
-DIR_DATA = "data/"
+DIR_SOUND = "asset/sound/"
+DIR_BGM = "asset/bgm/"
 
 TIMER_TICK = 60
 
-##############################
-# PYGAME FUNCTIONS & GLOBALS #
-##############################
 
 screen = pygame.display.set_mode(SIZE_GAMESCREEN)
+pygame.display.set_icon(pygame.image.load(DIR_IMAGE + 'etc/icon.png'))
+pygame.display.set_caption("the salvaged")
+
 surf_alpha = pygame.Surface((800, 600)).convert_alpha()
+surf_alpha_2 = pygame.Surface((800, 600)).convert_alpha()
 surf_fade = pygame.Surface((800, 600)).convert_alpha()
+
 
 clock = pygame.time.Clock()
 
@@ -102,6 +99,18 @@ def IMG_BG(number, alpha=255):
     ret = pygame.transform.scale(img, SIZE_GAMESCREEN)
     return ret
 
+def IMG_TITLE(number, alpha=255):
+    try:
+        img = pygame.image.load(DIR_IMAGE + "bg/title-{}.png".format(number))
+    except:
+        img = pygame.image.load(DIR_IMAGE + "bg/title-{}.jpg".format(number))
+
+    if alpha != 255:
+        img.set_alpha(alpha)
+        
+    ret = pygame.transform.scale(img, SIZE_GAMESCREEN)
+    return ret
+
 # use:
 # screen.blit(FONT(...), (x, y))
 def FONT(font, size, color, text):
@@ -112,10 +121,19 @@ def FONT(font, size, color, text):
         "cafe24": DIR_FONT + "Cafe24Ssurround.ttf"
     }
     
-
     return pygame.font.Font(fonts[font], size).render(text, True, color)
 
-
+def IMG_CH(name, alpha=255):
+    try:
+        img = pygame.image.load(DIR_IMAGE + "ch/" + name + ".png").convert_alpha()
+    except:
+        img = pygame.image.load(DIR_IMAGE + "ch/" + name + ".jpg").convert_alpha()
+    
+    if alpha != 255:
+        img.set_alpha(alpha)
+    
+    ret = pygame.transform.scale(img, (300, 600))
+    return ret
     
 
 #IMG_PC = pygame.transform.scale(pygame.image.load(DIR_IMAGE + "icon/pc.png"), SIZE_ICON)
@@ -140,6 +158,13 @@ def isin(pos, rect):
             pos[1] >= rect[1] and \
             pos[0] <= rect[0] + rect[2] and \
             pos[1] <= rect[1] + rect[3]
+
+def isin_or(pos, rects):
+    ret = False
+    for i in rects:
+        ret = ret or isin(pos, i)
+    
+    return ret
 
 # text: rendered text
 # rect: (x,y,w,h)
