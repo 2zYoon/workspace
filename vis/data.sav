@@ -1,6 +1,6 @@
 {
     "scores": {},
-    "scene": 44,
+    "scene": 1,
     "endings": {
         "0": [
             "0",
@@ -11,8 +11,8 @@
             "\uc2dd\ubb3c\uc778\uac04\uc73c\ub85c \uc0b4\uac8c \ub418\uc5c8\ub2e4."
         ]
     },
-    "bg": 3,
+    "bg": 1,
     "bgm": "none",
-    "speaker": "none",
+    "speaker": "",
     "dialog": 1
 }
