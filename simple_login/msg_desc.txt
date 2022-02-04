@@ -1,0 +1,43 @@
+# Basic Rules
+- separated by ":", we expect that there's something after ":"
+- no whitespace except user-specified field
+- user-specified field is only placed at the last and after ">"
+	- ex: CLIENT:RES:PWD>asdf1234
+- server do not trust client
+	- do not change something according to the message
+	- if server meets illegal format message, ignore and close the connection
+	
+
+
+# message type
+[SERVER|CLIENT]:NOTIFY > notifies something, do not require ACK, and do not expect the receiver to do something.
+[SERVER|CLIENT]:REQ > requests something and expects RES
+[SERVER|CLIENT]:RES > responses something
+[SERVER|CLIENT]:ACK > acknowledgement. full message type is placed after "ACK>"
+
+
+# message
+SERVER:
+	NOTIFY:
+		NOT_AVAILABLE > server cannot serve now
+		AVAILABLE > server can serve now
+		
+	REQ:
+		USER_ID > requires ID
+		USER_PWD > requires PWD
+		USER_ID_PWD > requires both (mainly for login) 
+	
+	RES:
+		LOGIN_SUCCESS > login was successful
+		LOGIN_FAILED_ID > login was failed because no ID exists
+		LOGIN_FAILED_PWD > login was failed because pwd doesn't match
+	
+	ACK > acknowledgement
+ 	
+CLIENT: > from client side
+	NOTIFY:
+	REQ: 
+	RES:
+		USER_ID > sends ID
+		USER_PWD > sends PWD
+		USER_ID_PWD > sends both "id@pwd"
